@@ -1,13 +1,32 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import { registerScreens } from './screens';
 import { Navigation } from 'react-native-navigation';
 
+import { Provider } from 'react-redux';
+import configureStore from './store/configureStore';
+
+const store = configureStore();
+
+
+let theNavigatorStyle = {};
+
+if (Platform.OS === 'ios') {
+	theNavigatorStyle = {
+		navBarTranslucent: false,
+		drawUnderNavBar: true
+	};
+} else {
+	theNavigatorStyle = {
+		navBarBackgroundColor: '#0a0a0a'
+	};
+}
+
 const navigatorStyle = {
-	navBarTranslucent: true,
-	drawUnderNavBar: true,
+	...theNavigatorStyle,
 	navBarTextColor: 'white',
 	navBarButtonColor: 'white',
+	navBarBackgroundColor: '#087f23',
 	statusBarTextColorSchema: 'light',
 	drawUnderTabBar: true
 };
@@ -15,7 +34,7 @@ const navigatorStyle = {
 class App extends Component {
 	constructor(props) {
 		super(props);
-		registerScreens(null, null);
+		registerScreens(store, Provider);
 		this.startApp();
 	}
 
